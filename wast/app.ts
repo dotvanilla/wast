@@ -23,16 +23,14 @@ namespace wast {
         let codeBlock: HTMLTableColElement;
 
         let addLine = function () {
-            if (line.length > 0) {
-                L = <any>$ts("<td>", { id: `L${lines.length + 1}`, class: "line-number" }).display((lines.length + 1).toString());
-                codeBlock = <any>$ts("<td>");
-                line.forEach(t => codeBlock.appendChild(t));
-                line = [];
-                row = <any>$ts("<tr>");
-                row.appendChild(L);
-                row.appendChild(codeBlock);
-                lines.push(row);
-            }
+            L = <any>$ts("<td>", { id: `L${lines.length + 1}`, class: "line-number" }).display((lines.length + 1).toString());
+            codeBlock = <any>$ts("<td>");
+            line.forEach(t => codeBlock.appendChild(t));
+            line = [];
+            row = <any>$ts("<tr>");
+            row.appendChild(L);
+            row.appendChild(codeBlock);
+            lines.push(row);
         }
 
         let startWith = function (token: string): boolean {

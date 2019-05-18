@@ -19,16 +19,14 @@ var wast;
         let L;
         let codeBlock;
         let addLine = function () {
-            if (line.length > 0) {
-                L = $ts("<td>", { id: `L${lines.length + 1}`, class: "line-number" }).display((lines.length + 1).toString());
-                codeBlock = $ts("<td>");
-                line.forEach(t => codeBlock.appendChild(t));
-                line = [];
-                row = $ts("<tr>");
-                row.appendChild(L);
-                row.appendChild(codeBlock);
-                lines.push(row);
-            }
+            L = $ts("<td>", { id: `L${lines.length + 1}`, class: "line-number" }).display((lines.length + 1).toString());
+            codeBlock = $ts("<td>");
+            line.forEach(t => codeBlock.appendChild(t));
+            line = [];
+            row = $ts("<tr>");
+            row.appendChild(L);
+            row.appendChild(codeBlock);
+            lines.push(row);
         };
         let startWith = function (token) {
             for (var i = 0; i < token.length; i++) {
