@@ -3,7 +3,7 @@
 namespace wast {
 
     const whitespace: string = "&nbsp;"
-    const keywords: string[] = "return|module|func".split("|");
+    const keywords: string[] = "return|module|func|data|global|local|import|param|result|mut|export|set_local|block|get_local|set_global|get_global|loop|br|br_if|if|then|start".split("|");
 
     export function highlight(wast: string): HTMLTableElement {
         if (TypeScript.logging.outputEverything) {

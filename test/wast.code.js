@@ -2,7 +2,7 @@
 var wast;
 (function (wast_1) {
     const whitespace = "&nbsp;";
-    const keywords = "return|module|func".split("|");
+    const keywords = "return|module|func|data|global|local|import|param|result|mut|export|set_local|block|get_local|set_global|get_global|loop|br|br_if|if|then|start".split("|");
     function highlight(wast) {
         if (TypeScript.logging.outputEverything) {
             console.log(wast);
