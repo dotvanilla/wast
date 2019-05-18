@@ -2,6 +2,7 @@
 var wast;
 (function (wast_1) {
     const whitespace = "&nbsp;";
+    const keywords = "return|module|func".split("|");
     function highlight(wast) {
         if (TypeScript.logging.outputEverything) {
             console.log(wast);
@@ -39,7 +40,9 @@ var wast;
         let addCodeToken = function () {
             if (buffer.length > 0) {
                 // split a code token
-                token = $ts("<span>", { class: "code" }).display(buffer.join(""));
+                let text = buffer.join("");
+                let type = keywords.indexOf(text) > -1 ? "keyword" : "code";
+                token = $ts("<span>", { class: type }).display(text);
                 buffer = [];
                 line.push(token);
             }
@@ -47,9 +50,10 @@ var wast;
         while (!code.EndRead) {
             c = code.Next;
             if (escape.comment) {
-                if (c = "\n") {
+                if (c == "\n") {
                     escape.comment = false;
                     token = $ts("<span>", { class: "comment" }).display(buffer.join(""));
+                    buffer = [];
                     line.push(token);
                     addLine();
                 }
@@ -58,7 +62,7 @@ var wast;
                 }
             }
             else if (escape.string) {
-                if (c = "\"") {
+                if (c == "\"") {
                     escape.string = false;
                     buffer.push(c);
                     token = $ts("<span>", { class: "string" }).display(buffer.join(""));

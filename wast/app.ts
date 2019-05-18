@@ -3,6 +3,7 @@
 namespace wast {
 
     const whitespace: string = "&nbsp;"
+    const keywords: string[] = "return|module|func".split("|");
 
     export function highlight(wast: string): HTMLTableElement {
         if (TypeScript.logging.outputEverything) {
@@ -46,7 +47,10 @@ namespace wast {
         let addCodeToken = function () {
             if (buffer.length > 0) {
                 // split a code token
-                token = $ts("<span>", { class: "code" }).display(buffer.join(""));
+                let text: string = buffer.join("");
+                let type: string = keywords.indexOf(text) > -1 ? "keyword" : "code";
+
+                token = $ts("<span>", { class: type }).display(text);
                 buffer = []
                 line.push(token);
             }
@@ -56,9 +60,10 @@ namespace wast {
             c = code.Next;
 
             if (escape.comment) {
-                if (c = "\n") {
+                if (c == "\n") {
                     escape.comment = false;
                     token = $ts("<span>", { class: "comment" }).display(buffer.join(""));
+                    buffer = [];
                     line.push(token);
 
                     addLine();
@@ -66,7 +71,7 @@ namespace wast {
                     buffer.push(c);
                 }
             } else if (escape.string) {
-                if (c = "\"") {
+                if (c == "\"") {
                     escape.string = false;
                     buffer.push(c);
                     token = $ts("<span>", { class: "string" }).display(buffer.join(""));
