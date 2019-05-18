@@ -1,0 +1,25 @@
+<script src="linq.min.js"></script>
+<script src="wast.code.js"></script>
+<script>
+    $ts(function () {
+        $ts.getText("Elastic_collision.wast", function (code) {
+            $ts("#preview").display(wast.highlight(code));
+        })
+    })
+</script>
+
+<style>
+    .string {
+        color: brown;
+    }
+
+    .comment {
+        color: green;
+    }
+
+    .code {
+        color: darkslateblue;
+    }
+</style>
+
+<div id="preview"></div>
