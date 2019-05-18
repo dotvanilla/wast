@@ -2,6 +2,8 @@
 
 namespace wast {
 
+    const whitespace: string = "&nbsp;"
+
     export function highlight(wast: string) {
         if (TypeScript.logging.outputEverything) {
             console.log(wast);
@@ -28,6 +30,16 @@ namespace wast {
             row.appendChild(codeBlock);
         }
 
+        let startWith = function (token: string): boolean {
+            for (var i = 0; i < token.length; i++) {
+                if (buffer[i] != token.charAt(i)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         while (!code.EndRead) {
             c = code.Next;
 
@@ -38,6 +50,45 @@ namespace wast {
                     line.push(token);
 
                     addLine();
+                } else {
+                    buffer.push(c);
+                }
+            } else if (escape.string) {
+                if (c = "\"") {
+                    escape.string = false;
+                    buffer.push(c);
+                    token = $ts("<span>", { class: "string" }).display(buffer.join(""));
+                    buffer = [];
+                    line.push(token);
+                } else {
+                    buffer.push(c);
+                }
+            } else {
+                if (startWith(";;")) {
+                    escape.comment = true;
+                } else if (c == "\"") {
+                    escape.string = true;
+                } else if (c == " ") {
+                    if (buffer.length > 0) {
+                        // split a code token
+                        token = $ts("<span>", { class: "code" }).display(buffer.join(" "));
+                        buffer = []
+                        line.push(token);
+                    }
+                    // add current token delimiter whitespace 
+                    line.push($ts("<span>").display(whitespace));
+                } else if (c == "(" || c == ")") {
+                    // s-expression delimiter
+                    // using strong text style
+                    if (buffer.length > 0) {
+                        // split a code token
+                        token = $ts("<span>", { class: "code" }).display(buffer.join(" "));
+                        buffer = []
+                        line.push(token);
+                    }
+
+                    // add current S-expression token delimiter 
+                    line.push($ts("<span>", { style: "font-style: strong;" }).display(c));
                 } else {
                     buffer.push(c);
                 }
