@@ -49,7 +49,13 @@ namespace wast {
             if (buffer.length > 0) {
                 // split a code token
                 let text: string = buffer.join("");
-                let type: string = keywords.indexOf(text) > -1 ? "keyword" : (types.indexOf(text) > -1 ? "type" : "code");
+                let type: string;
+
+                if (buffer[0] == "$") {
+                    type = "symbol";
+                } else {
+                    type = keywords.indexOf(text) > -1 ? "keyword" : (types.indexOf(text) > -1 ? "type" : "code")
+                }
 
                 token = $ts("<span>", { class: type }).display(text);
                 buffer = []

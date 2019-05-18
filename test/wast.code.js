@@ -42,7 +42,13 @@ var wast;
             if (buffer.length > 0) {
                 // split a code token
                 let text = buffer.join("");
-                let type = wast_1.keywords.indexOf(text) > -1 ? "keyword" : (wast_1.types.indexOf(text) > -1 ? "type" : "code");
+                let type;
+                if (buffer[0] == "$") {
+                    type = "symbol";
+                }
+                else {
+                    type = wast_1.keywords.indexOf(text) > -1 ? "keyword" : (wast_1.types.indexOf(text) > -1 ? "type" : "code");
+                }
                 token = $ts("<span>", { class: type }).display(text);
                 buffer = [];
                 line.push(token);
