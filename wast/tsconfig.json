@@ -6,7 +6,7 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "outDir": "../dist",
-    "outFile": "../build/wasm.code.js",
+    "outFile": "../build/wast.code.js",
     "declaration": true
   },
   "exclude": [
