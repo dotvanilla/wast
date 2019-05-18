@@ -3,7 +3,7 @@
 namespace wast {
 
     export const whitespace: string = "&nbsp;"
-    export const keywords: string[] = "return|module|func|data|global|local|import|param|result|mut|export|set_local|block|get_local|set_global|get_global|loop|br|br_if|if|then|start".split("|");
+    export const keywords: string[] = "return|module|func|data|global|local|import|param|result|mut|export|set_local|block|get_local|set_global|get_global|loop|br|br_if|if|then|else|start".split("|");
     export const types: string[] = "i32|i64|f32|f64".split("|");
 
     export function highlight(wast: string): HTMLTableElement {
@@ -88,6 +88,7 @@ namespace wast {
             } else {
                 if (startWith(";;")) {
                     escape.comment = true;
+                    buffer.push(c);
                 } else if (c == "\"") {
                     escape.string = true;
                     buffer.push("\"");

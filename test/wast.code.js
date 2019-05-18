@@ -2,7 +2,7 @@
 var wast;
 (function (wast_1) {
     wast_1.whitespace = "&nbsp;";
-    wast_1.keywords = "return|module|func|data|global|local|import|param|result|mut|export|set_local|block|get_local|set_global|get_global|loop|br|br_if|if|then|start".split("|");
+    wast_1.keywords = "return|module|func|data|global|local|import|param|result|mut|export|set_local|block|get_local|set_global|get_global|loop|br|br_if|if|then|else|start".split("|");
     wast_1.types = "i32|i64|f32|f64".split("|");
     function highlight(wast) {
         if (TypeScript.logging.outputEverything) {
@@ -81,6 +81,7 @@ var wast;
             else {
                 if (startWith(";;")) {
                     escape.comment = true;
+                    buffer.push(c);
                 }
                 else if (c == "\"") {
                     escape.string = true;
