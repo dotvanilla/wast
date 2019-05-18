@@ -84,6 +84,7 @@ var wast;
                 }
                 else if (c == "\"") {
                     escape.string = true;
+                    buffer.push("\"");
                 }
                 else if (c == " ") {
                     addCodeToken();

@@ -90,6 +90,7 @@ namespace wast {
                     escape.comment = true;
                 } else if (c == "\"") {
                     escape.string = true;
+                    buffer.push("\"");
                 } else if (c == " ") {
                     addCodeToken();
                     // add current token delimiter whitespace 
