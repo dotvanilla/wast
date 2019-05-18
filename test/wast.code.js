@@ -1,8 +1,9 @@
 /// <reference path="../linq.d.ts" />
 var wast;
 (function (wast_1) {
-    const whitespace = "&nbsp;";
-    const keywords = "return|module|func|data|global|local|import|param|result|mut|export|set_local|block|get_local|set_global|get_global|loop|br|br_if|if|then|start".split("|");
+    wast_1.whitespace = "&nbsp;";
+    wast_1.keywords = "return|module|func|data|global|local|import|param|result|mut|export|set_local|block|get_local|set_global|get_global|loop|br|br_if|if|then|start".split("|");
+    wast_1.types = "i32|i64|f32|f64".split("|");
     function highlight(wast) {
         if (TypeScript.logging.outputEverything) {
             console.log(wast);
@@ -19,7 +20,7 @@ var wast;
         let codeBlock;
         let addLine = function () {
             if (line.length > 0) {
-                L = $ts("<td>", { id: `L${lines.length + 1}` }).display((lines.length + 1).toString());
+                L = $ts("<td>", { id: `L${lines.length + 1}`, class: "line-number" }).display((lines.length + 1).toString());
                 codeBlock = $ts("<td>");
                 line.forEach(t => codeBlock.appendChild(t));
                 line = [];
@@ -41,7 +42,7 @@ var wast;
             if (buffer.length > 0) {
                 // split a code token
                 let text = buffer.join("");
-                let type = keywords.indexOf(text) > -1 ? "keyword" : "code";
+                let type = wast_1.keywords.indexOf(text) > -1 ? "keyword" : (wast_1.types.indexOf(text) > -1 ? "type" : "code");
                 token = $ts("<span>", { class: type }).display(text);
                 buffer = [];
                 line.push(token);
@@ -83,7 +84,7 @@ var wast;
                 else if (c == " ") {
                     addCodeToken();
                     // add current token delimiter whitespace 
-                    line.push($ts("<span>").display(whitespace));
+                    line.push($ts("<span>").display(wast_1.whitespace));
                 }
                 else if (c == "(" || c == ")") {
                     // s-expression delimiter

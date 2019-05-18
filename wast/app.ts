@@ -2,8 +2,9 @@
 
 namespace wast {
 
-    const whitespace: string = "&nbsp;"
-    const keywords: string[] = "return|module|func|data|global|local|import|param|result|mut|export|set_local|block|get_local|set_global|get_global|loop|br|br_if|if|then|start".split("|");
+    export const whitespace: string = "&nbsp;"
+    export const keywords: string[] = "return|module|func|data|global|local|import|param|result|mut|export|set_local|block|get_local|set_global|get_global|loop|br|br_if|if|then|start".split("|");
+    export const types: string[] = "i32|i64|f32|f64".split("|");
 
     export function highlight(wast: string): HTMLTableElement {
         if (TypeScript.logging.outputEverything) {
@@ -23,7 +24,7 @@ namespace wast {
 
         let addLine = function () {
             if (line.length > 0) {
-                L = <any>$ts("<td>", { id: `L${lines.length + 1}` }).display((lines.length + 1).toString());
+                L = <any>$ts("<td>", { id: `L${lines.length + 1}`, class: "line-number" }).display((lines.length + 1).toString());
                 codeBlock = <any>$ts("<td>");
                 line.forEach(t => codeBlock.appendChild(t));
                 line = [];
@@ -48,7 +49,7 @@ namespace wast {
             if (buffer.length > 0) {
                 // split a code token
                 let text: string = buffer.join("");
-                let type: string = keywords.indexOf(text) > -1 ? "keyword" : "code";
+                let type: string = keywords.indexOf(text) > -1 ? "keyword" : (types.indexOf(text) > -1 ? "type" : "code");
 
                 token = $ts("<span>", { class: type }).display(text);
                 buffer = []
