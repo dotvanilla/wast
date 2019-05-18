@@ -4,7 +4,7 @@ namespace wast {
 
     const whitespace: string = "&nbsp;"
 
-    export function highlight(wast: string) {
+    export function highlight(wast: string): HTMLTableElement {
         if (TypeScript.logging.outputEverything) {
             console.log(wast);
         }
@@ -21,13 +21,16 @@ namespace wast {
         let codeBlock: HTMLTableColElement;
 
         let addLine = function () {
-            L = <any>$ts("<td>", { id: `L${lines.length + 1}` }).display((lines.length + 1).toString());
-            codeBlock = <any>$ts("<td>");
-            line.forEach(t => codeBlock.appendChild(t));
-            line = [];
-            row = <any>$ts("<tr>");
-            row.appendChild(L);
-            row.appendChild(codeBlock);
+            if (line.length > 0) {
+                L = <any>$ts("<td>", { id: `L${lines.length + 1}` }).display((lines.length + 1).toString());
+                codeBlock = <any>$ts("<td>");
+                line.forEach(t => codeBlock.appendChild(t));
+                line = [];
+                row = <any>$ts("<tr>");
+                row.appendChild(L);
+                row.appendChild(codeBlock);
+                lines.push(row);
+            }
         }
 
         let startWith = function (token: string): boolean {
@@ -38,6 +41,15 @@ namespace wast {
             }
 
             return true;
+        }
+
+        let addCodeToken = function () {
+            if (buffer.length > 0) {
+                // split a code token
+                token = $ts("<span>", { class: "code" }).display(buffer.join(""));
+                buffer = []
+                line.push(token);
+            }
         }
 
         while (!code.EndRead) {
@@ -69,31 +81,28 @@ namespace wast {
                 } else if (c == "\"") {
                     escape.string = true;
                 } else if (c == " ") {
-                    if (buffer.length > 0) {
-                        // split a code token
-                        token = $ts("<span>", { class: "code" }).display(buffer.join(" "));
-                        buffer = []
-                        line.push(token);
-                    }
+                    addCodeToken();
                     // add current token delimiter whitespace 
                     line.push($ts("<span>").display(whitespace));
                 } else if (c == "(" || c == ")") {
                     // s-expression delimiter
                     // using strong text style
-                    if (buffer.length > 0) {
-                        // split a code token
-                        token = $ts("<span>", { class: "code" }).display(buffer.join(" "));
-                        buffer = []
-                        line.push(token);
-                    }
-
+                    addCodeToken();
                     // add current S-expression token delimiter 
                     line.push($ts("<span>", { style: "font-style: strong;" }).display(c));
+                } else if (c == "\n") {
+                    addLine();
                 } else {
                     buffer.push(c);
                 }
             }
         }
+
+        addCodeToken();
+
+        let preview: HTMLTableElement = <any>$ts("<table>");
+        lines.forEach(tr => preview.appendChild(tr));
+        return preview;
     }
 
     export class Escapes {
