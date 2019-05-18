@@ -97,7 +97,7 @@ var wast;
                     // using strong text style
                     addCodeToken();
                     // add current S-expression token delimiter 
-                    line.push($ts("<span>", { style: "font-style: strong;" }).display(c));
+                    line.push($ts("<span>", { class: "S" }).display(c));
                 }
                 else if (c == "\n") {
                     addLine();
